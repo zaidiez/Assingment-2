@@ -1,1 +1,32 @@
+import ast
+from Crypto.PublicKey import RSA
+from Crypto.Cipher import PKCS1_OAEP
 
+text_=input("Enter a string: ")
+privatekey, publickey = RSA.generate(4096)
+
+file = open('rsa_public.pem', 'wb')
+file.write (privatekey.save_pkcs1('PEM'))
+file.write(key.privatekey().exportKey('PEM'))
+file.close()
+
+file = open('rsa_private.pem', 'wb')
+file.write (publickey.save_pkcs1('PEM'))
+file.write(key.publickey().exportKey('PEM'))
+file.close()
+
+#Encryption
+file = open('rsa_public.pem', 'rb')
+publickey = RSA.importKey(file.read())
+text = input("Enter string to encrypt: ")
+encryptor = PKCS1_OAEP.new(publickey)
+encrypted_text = encryptor.encrypt(bytes(text, 'utf-8'))
+print("Encrypted message is", encrypted_text)
+
+#Decryption
+file1 = open('rsa_private.pem', 'rb')
+publickey1 = RSA.importKey(file1.read())
+text = input("Enter string to decrypt: ")
+decryptor = PKCS1_OAEP.new(publickey1)
+decrypted_text = decryptor.decrypt(ast.literal_eval(str(text)))
+print("Decrypted message is", decrypted_text)
